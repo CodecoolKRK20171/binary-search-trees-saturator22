@@ -15,15 +15,63 @@ public class TreeNode {
         return Integer.toString(value);
     }
 
-    public void removeChild(TreeNode child) {
-        if (left == child) {
-            left = null;
+    public void removeChild(int value ,TreeNode parent) {
+        if (value < this.value) {
+            if (left != null) {
+                left.removeChild(value, this);
+            } else {
+                throw new IllegalArgumentException("Tried to remove non existing child");
+            }
+        } else if (value > this.value) {
+            if (right != null) {
+                right.removeChild(value, this);
+            } else {
+                throw new IllegalArgumentException("Tried to remove non existing child");
+            }
+        } else {
+            if (right != null && left != null) {
+                this.value = right.getLowest();
+                right.removeChild(this.value, this);
+            } else if (parent.left == this) {
+                parent.left = (left != null) ? left : right;
+            } else if (parent.right == this) {
+                parent.right = (left != null) ? left : right;
+            }
+            return;
         }
-        else if (right == child) {
-            right = null;
+    }
+
+
+
+    private int getLowest() {
+        if(left == null) {
+            return this.value;
         }
-        else {
-            throw new IllegalArgumentException("Tried to remove non existing child");
-        }
+
+        return left.getLowest();
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public TreeNode getLeft() {
+        return left;
+    }
+
+    public void setLeft(TreeNode left) {
+        this.left = left;
+    }
+
+    public TreeNode getRight() {
+        return right;
+    }
+
+    public void setRight(TreeNode right) {
+        this.right = right;
     }
 }

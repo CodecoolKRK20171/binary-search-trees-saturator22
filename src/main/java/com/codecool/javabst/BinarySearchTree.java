@@ -29,11 +29,11 @@ public class BinarySearchTree {
         return null;
     }
 
-    public boolean search(Integer toFind) {
+    public TreeNode search(Integer toFind) {
         TreeNode current = root;
         while (current != null) {
             if (toFind == current.value) {
-                return true;
+                return current;
             }
             else if (toFind < current.value) {
                 current = current.left;
@@ -42,7 +42,7 @@ public class BinarySearchTree {
                 current = current.right;
             }
         }
-        return false;
+        return null;
     }
 
     public void add(Integer toAdd) {
@@ -74,26 +74,17 @@ public class BinarySearchTree {
 
     public void remove(Integer toRemove) {
         if (root.value == toRemove) {
-            root = null;
+            TreeNode dummyNode = new TreeNode(0);
+            dummyNode.setLeft(root);
+            root.removeChild(toRemove, dummyNode);
+            root = dummyNode.getLeft();
             return;
+        } else {
+            root.removeChild(toRemove, null);
         }
-        TreeNode current = root;
-        TreeNode parent = root;
-        while (current != null) {
-            if (toRemove == current.value) {
-                parent.removeChild(current);
-                return;
-            }
-            else if (toRemove < current.value) {
-                parent = current;
-                current = current.left;
-            }
-            else {
-                parent = current;
-                current = current.right;
-            }
-        }
-        throw new IllegalArgumentException("Element not in the tree");
     }
 
+    public TreeNode getRoot() {
+        return root;
+    }
 }
